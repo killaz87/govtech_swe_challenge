@@ -6,7 +6,6 @@ import com.govtech.bean.PerformUploadResult;
 import com.govtech.repository.bean.User;
 import com.govtech.service.UserService;
 import com.govtech.service.ValidatorService;
-import com.govtech.util.CSVHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -59,10 +58,15 @@ public class GovtechController {
     @PostMapping(upload)
     public ResponseEntity<PerformUploadResult> performUpload(@RequestParam("file") MultipartFile file)
     {
-        boolean isSuccessful = userService.performUpload(file);
-
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+
+        if(!validatorService.validatePerformUpload(file))
+        {
+            return new ResponseEntity<>(null, headers, HttpStatus.BAD_REQUEST);
+        }
+
+        boolean isSuccessful = userService.performUpload(file);
 
         if(isSuccessful)
             return new ResponseEntity<>(PerformUploadResult.builder().success(1).build(), headers, HttpStatus.OK);

@@ -38,4 +38,32 @@ public class CSVHelper {
             throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
         }
     }
+
+    public static boolean csvValidationCheck(InputStream is) {
+        try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+             CSVParser csvParser = new CSVParser(fileReader,
+                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+
+            //Headers size check
+            if(csvParser.getHeaderMap().size() > 2)
+                return false;
+
+            //Headers checks
+            if(csvParser.getHeaderMap().get("Name") == null || csvParser.getHeaderMap().get("Salary") == null)
+                return false;
+
+            Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+            for (CSVRecord csvRecord : csvRecords) {
+                //If csv record has any more than 2 columns, fail the validation check
+                if(csvRecord.size() > 2)
+                    return false;
+
+                if(csvRecord.get("Name") == null || csvRecord.get("Salary") == null)
+                    return false;
+            }
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+        }
+    }
 }
