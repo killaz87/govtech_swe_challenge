@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "2066f048-4f53-4e8a-83c7-0e779158304e",
+		"name": "Govtech SWE Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/govtech/users?max=9000&limit=&offset=&sort=salary&min=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"govtech",
+						"users"
+					],
+					"query": [
+						{
+							"key": "max",
+							"value": "9000"
+						},
+						{
+							"key": "limit",
+							"value": ""
+						},
+						{
+							"key": "offset",
+							"value": ""
+						},
+						{
+							"key": "sort",
+							"value": "salary"
+						},
+						{
+							"key": "min",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Projects/govtech_swe_challenge/src/main/csvdata/uploadValid.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/govtech/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"govtech",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
