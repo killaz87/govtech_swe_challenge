@@ -1,6 +1,7 @@
 package com.govtech.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.govtech.bean.ErrorResult;
 import com.govtech.bean.GetUsersResult;
 import com.govtech.bean.PerformUploadResult;
 import com.govtech.repository.bean.User;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,14 +58,16 @@ public class GovtechController {
     }
 
     @PostMapping(upload)
-    public ResponseEntity<PerformUploadResult> performUpload(@RequestParam("file") MultipartFile file)
+    @Async("threadPoolTaskExecutor")
+    public ResponseEntity<Object> performUpload(@RequestParam("file") MultipartFile file)
     {
         var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        if(!validatorService.validatePerformUpload(file))
+        String errorMsg = validatorService.validatePerformUpload(file);
+        if(errorMsg != null && !errorMsg.equalsIgnoreCase(""))
         {
-            return new ResponseEntity<>(null, headers, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorResult.builder().message(errorMsg).build(), headers, HttpStatus.BAD_REQUEST);
         }
 
         boolean isSuccessful = userService.performUpload(file);

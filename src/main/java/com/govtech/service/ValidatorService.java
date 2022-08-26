@@ -21,7 +21,7 @@ public class ValidatorService {
     }
 
     @SneakyThrows
-    public boolean validatePerformUpload(MultipartFile file) {
+    public String validatePerformUpload(MultipartFile file) {
         return CSVHelper.csvValidationCheck(file.getInputStream());
     }
 }

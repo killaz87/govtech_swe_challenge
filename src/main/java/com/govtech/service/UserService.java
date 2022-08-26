@@ -6,6 +6,7 @@ import com.govtech.util.CSVHelper;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +25,7 @@ public class UserService {
     }
 
     @SneakyThrows
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public boolean performUpload(MultipartFile file) {
         try {
             List<User> inputUsers = CSVHelper.csvToUsers(file.getInputStream());
